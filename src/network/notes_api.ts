@@ -32,3 +32,9 @@ export async function createNote(note: NoteInput): Promise<Note> {
   });
   return response.json();
 }
+
+export async function deleteNote(noteId: string) {
+  await fetchData(`${process.env.REACT_APP_BASE_URL}/notes/` + noteId, {
+    method: "DELETE",
+  });
+}
