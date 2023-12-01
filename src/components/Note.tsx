@@ -6,10 +6,16 @@ import { formatDate } from "../utils/formatDate";
 import { MdDelete } from "react-icons/md";
 interface NoteProps {
   note: NoteModel;
+  onNoteClicked: (note: NoteModel) => void;
   onDeleteNoteClicked: (note: NoteModel) => void;
   className?: string;
 }
-const Note = ({ note, className, onDeleteNoteClicked }: NoteProps) => {
+const Note = ({
+  note,
+  className,
+  onDeleteNoteClicked,
+  onNoteClicked,
+}: NoteProps) => {
   const { title, text, createdAt, updatedAt } = note;
   let createdUpdatedText: string;
   if (updatedAt > createdAt) {
@@ -18,10 +24,13 @@ const Note = ({ note, className, onDeleteNoteClicked }: NoteProps) => {
     createdUpdatedText = "Created:" + formatDate(createdAt);
   }
   return (
-    <Card className={`${styles.noteCard} ${className}`}>
+    <Card
+      className={`${styles.noteCard} ${className}`}
+      onClick={() => onNoteClicked(note)}
+    >
       <Card.Body className={styles.cardBody}>
         <Card.Title className={styleUtils.flexCenter}>
-          {title}{" "}
+          {title}
           <MdDelete
             className="text-muted ms-auto"
             onClick={(e) => {
