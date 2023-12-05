@@ -1,5 +1,5 @@
 import { Note } from "../models/notes";
-
+import { User } from "../models/user";
 async function fetchData(input: RequestInfo, init?: RequestInit) {
   const response = await fetch(input, init);
   if (response.ok) {
@@ -10,7 +10,58 @@ async function fetchData(input: RequestInfo, init?: RequestInit) {
     throw Error(errorMessage);
   }
 }
-console.log(process.env.REACT_APP_BASE_URL, "varr");
+
+export async function getLoggedInUser(): Promise<User> {
+  const response = await fetchData(`${process.env.REACT_APP_BASE_URL}/users`, {
+    method: "GET",
+  });
+  return response.json();
+}
+
+export interface SignUpCredentials {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export async function signUp(credentials: SignUpCredentials): Promise<User> {
+  const response = await fetchData(
+    `${process.env.REACT_APP_BASE_URL}/users/signup`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
+  );
+  return response.json();
+}
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export async function login(credentials: LoginCredentials): Promise<Note[]> {
+  const response = await fetchData(
+    `${process.env.REACT_APP_BASE_URL}/users/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
+  );
+  return response.json();
+}
+
+export async function logout() {
+  await fetchData(`${process.env.REACT_APP_BASE_URL}/users/logout`, {
+    method: "POST",
+  });
+}
+
 export async function fetchNotes(): Promise<Note[]> {
   const response = await fetchData(`${process.env.REACT_APP_BASE_URL}/notes`, {
     method: "GET",
