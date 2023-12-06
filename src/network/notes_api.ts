@@ -42,7 +42,7 @@ export interface LoginCredentials {
   password: string;
 }
 
-export async function login(credentials: LoginCredentials): Promise<Note[]> {
+export async function login(credentials: LoginCredentials): Promise<User> {
   const response = await fetchData(
     `${process.env.REACT_APP_BASE_URL}/users/login`,
     {
